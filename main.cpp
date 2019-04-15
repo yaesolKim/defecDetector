@@ -11,7 +11,7 @@ using std::cerr;
 using std::endl;
 
 Mat frame, frame_1;
-const char* src_window = "Select ROI";
+const char* src_window = "Optowell Defect Detector";
 
 int drag = 0, select_flag = 0;
 bool setmonitor = false;
@@ -19,7 +19,7 @@ bool setmonitor = false;
 Point point1, point2, p11, p12, p21, p22, p31, p32, p41, p42;
 int err1, err2, err3, err4;
 bool err1_st, err2_st, err3_st, err4_st;
-int thr = 100;
+int thr; // = 150;
 
 int n1, n2, n3, n4;
 double diff1, diff2, diff3, diff4;
@@ -29,6 +29,9 @@ void mouseHandler(int event, int x, int y, int flags, void* param);
 
 int main(int, char**)
 {
+	cout << "Enter the threshold as an integer: ";
+	std::cin >> thr;
+
 	err1 = 0;
 	err2 = 0;
 	err3 = 0;
@@ -41,12 +44,12 @@ int main(int, char**)
 		return 1;
 	}
 
-	cout << "Frame width: " << capture.get(CAP_PROP_FRAME_WIDTH) << endl;
+	cout << endl << "Frame width: " << capture.get(CAP_PROP_FRAME_WIDTH) << endl;
 	cout << "     height: " << capture.get(CAP_PROP_FRAME_HEIGHT) << endl;
 	cout << "Capturing FPS: " << capture.get(CAP_PROP_FPS) << endl;
 
-	cout << endl << "Press 'ESC' to quit, 'space' to toggle frame processing" << endl;
-	cout << endl << "Start grabbing..." << endl;
+//	cout << endl << "Press 'ESC' to quit, 'space' to toggle frame processing" << endl;
+	cout << endl << "Select 4 monitors by dragging" << endl;
 
 	size_t nFrames = 0;
 	bool enableProcessing = false;
@@ -116,6 +119,8 @@ int main(int, char**)
 					n4 = abs(p41.x - p42.x) * abs(p41.y - p42.y);
 
 					frame_1 = frame.clone();
+
+					cout << endl << "Start Defect Detecting! " << endl;
 					setmonitor = true;
 				}
 
