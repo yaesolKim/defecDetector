@@ -1,7 +1,7 @@
 # defecDetector
 Detect defects that can be identified on monitors.
 
-##Installing
+## Installing
 
-##Running the program
+## Running the program
 double click the exe file.
