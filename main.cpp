@@ -27,8 +27,12 @@ double diff1, diff2, diff3, diff4;
 
 void mouseHandler(int event, int x, int y, int flags, void* param);
 
-int main(int, char**)
+int main(int, char**) 
 {
+	cout << "*** This program detect defects that can be identified on monitors ***" << endl <<endl;
+	cout << "ESC -> Turn off the program" << endl;
+	cout << "Space bar -> Show results" << endl <<endl;
+
 	cout << "Enter the threshold as an integer: ";
 	std::cin >> thr;
 
@@ -251,18 +255,29 @@ int main(int, char**)
 			processingTime += cv::getTickCount() - tp0;
 			imshow("Frame", processed);
 		}
-		int key = waitKey(1);
+
+		char key = waitKey(1);
 		if (key == 27)//ESC
+		{
+			cout << "ESC" << endl;
 			break;
+		}
+			
 		if (key == 32)//SPACE
 		{
-			enableProcessing = !enableProcessing;
-			cout << "Enable frame processing ('space' key): " << enableProcessing << endl;
+			//enableProcessing = !enableProcessing;
+			//cout << "Enable frame processing ('space' key): " << enableProcessing << endl;
+			cout << endl << "[Number of errors]" << endl;
+			cout << "monitor 1: " << err1 << endl;
+			cout << "monitor 2: " << err2 << endl;
+			cout << "monitor 3: " << err3 << endl;
+			cout << "monitor 4: " << err4 << endl << endl;
 		}
 	}
-	std::cout << "Number of captured frames: " << nFrames << endl;
 
-	return nFrames > 0 ? 0 : 1;
+//	std::cout << "Number of captured frames: " << nFrames << endl;
+
+	return 0;// nFrames > 0 ? 0 : 1;
 }
 
 
