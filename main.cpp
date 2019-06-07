@@ -4,6 +4,7 @@
 #include <opencv2/highgui.hpp>
 #include <opencv2/imgproc.hpp>
 #include <iostream>
+#include <ctime>
 
 using namespace cv;
 using std::cout;
@@ -19,6 +20,9 @@ bool setmonitor = false;
 Point point1, point2, p11, p12, p21, p22, p31, p32, p41, p42;
 int err1, err2, err3, err4;
 bool err1_st, err2_st, err3_st, err4_st;
+int m1[50][3], m2[50][3], m3[50][3], m4[50][3];
+int date[3];
+
 int thr; // = 150;
 
 int n1, n2, n3, n4;
@@ -28,12 +32,23 @@ double diff1, diff2, diff3, diff4;
 void mouseHandler(int event, int x, int y, int flags, void* param);
 
 int main(int, char**) 
-{
-	cout << "*** This program detect defects that can be identified on monitors ***" << endl <<endl;
-	cout << "ESC -> Turn off the program" << endl;
-	cout << "Space bar -> Show results" << endl <<endl;
+{ 	
+	time_t curr_time;
+	struct tm *curr_tm;
 
-	cout << "Enter the threshold as an integer: ";
+	cout << "*** This program detect defects that can be identified on monitors ***" << endl <<endl;
+
+	curr_time = time(NULL);
+	curr_tm = localtime(&curr_time);
+
+	date[0] = curr_tm->tm_year + 1900;
+	date[1] = curr_tm->tm_mon + 1;
+	date[2] = curr_tm->tm_mday;
+
+	cout << "ESC -> Turn off the program" << endl;
+	cout << "Space bar -> Show results" << endl;
+
+	cout << endl << "Enter the threshold as an integer: ";
 	std::cin >> thr;
 
 	err1 = 0;
@@ -47,12 +62,11 @@ int main(int, char**)
 		cerr << "ERROR: Can't initialize camera capture" << endl;
 		return 1;
 	}
-
+	
 	cout << endl << "Frame width: " << capture.get(CAP_PROP_FRAME_WIDTH) << endl;
 	cout << "     height: " << capture.get(CAP_PROP_FRAME_HEIGHT) << endl;
 	cout << "Capturing FPS: " << capture.get(CAP_PROP_FPS) << endl;
 
-//	cout << endl << "Press 'ESC' to quit, 'space' to toggle frame processing" << endl;
 	cout << endl << "Select 4 monitors by dragging" << endl;
 
 	size_t nFrames = 0;
@@ -125,6 +139,8 @@ int main(int, char**)
 					frame_1 = frame.clone();
 
 					cout << endl << "Start Defect Detecting! " << endl;
+
+					cout << endl << "[ Error Logs ]" << endl;
 					setmonitor = true;
 				}
 
@@ -185,8 +201,16 @@ int main(int, char**)
 				{
 					if (err1_st == false)
 					{
+						curr_time = time(NULL);
+						curr_tm = localtime(&curr_time);
+
+						m1[err1][0] = curr_tm->tm_hour;
+						m1[err1][1] = curr_tm->tm_min;
+						m1[err1][2] = curr_tm->tm_sec;
+						
+						cout << "monitor 1: error #" << err1+1 << " | " <<curr_tm->tm_year + 1900 << "-" << curr_tm->tm_mon + 1 << "-" << curr_tm->tm_mday << " | ";
+						cout << m1[err1][0] << ":" << m1[err1][1] << ":" << m1[err1][2] << endl;
 						err1++;
-						cout << "monitor 1 makes error: " << err1 << " times" << endl;
 					}
 					err1_st = true;
 				}
@@ -199,8 +223,16 @@ int main(int, char**)
 				{
 					if (err2_st == false)
 					{
+						curr_time = time(NULL);
+						curr_tm = localtime(&curr_time);
+						
+						m2[err2][0] = curr_tm->tm_hour;
+						m2[err2][1] = curr_tm->tm_min;
+						m2[err2][2] = curr_tm->tm_sec;
+
+						cout << "monitor 2: error #" << err2 + 1 << " | " << curr_tm->tm_year + 1900 << "-" << curr_tm->tm_mon + 1 << "-" << curr_tm->tm_mday << " | ";
+						cout << m2[err2][0] << ":" << m2[err2][1] << ":" << m2[err2][2] << endl;
 						err2++;
-						cout << "monitor 2 makes error: " << err2 << " times" << endl;
 					}
 					err2_st = true;
 				}
@@ -213,8 +245,16 @@ int main(int, char**)
 				{
 					if (err3_st == false)
 					{
+						curr_time = time(NULL);
+						curr_tm = localtime(&curr_time);
+						
+						m3[err3][0] = curr_tm->tm_hour;
+						m3[err3][1] = curr_tm->tm_min;
+						m3[err3][2] = curr_tm->tm_sec;
+
+						cout << "monitor 3: error #" << err3 + 1 << " | " << curr_tm->tm_year + 1900 << "-" << curr_tm->tm_mon + 1 << "-" << curr_tm->tm_mday << " | ";
+						cout << m3[err3][0] << ":" << m3[err3][1] << ":" << m3[err3][2] << endl;
 						err3++;
-						cout << "monitor 3 makes error: " << err3 << " times" << endl;
 					}
 					err3_st = true;
 				}
@@ -227,8 +267,16 @@ int main(int, char**)
 				{
 					if (err4_st == false)
 					{
-						err4++;
-						cout << "monitor 4 makes error: " << err4 << " times" << endl;
+						curr_time = time(NULL);
+						curr_tm = localtime(&curr_time);
+
+						m4[err4][0] = curr_tm->tm_hour;
+						m4[err4][1] = curr_tm->tm_min;
+						m4[err4][2] = curr_tm->tm_sec;
+
+						cout << "monitor 4: error #" << err4 + 1 << " | " << curr_tm->tm_year + 1900 << "-" << curr_tm->tm_mon + 1 << "-" << curr_tm->tm_mday << " | ";
+						cout << m4[err4][0] << ":" << m4[err4][1] << ":" << m4[err4][2] << endl;
+						err4++;					
 					}						
 					err4_st = true;
 				}
@@ -267,11 +315,26 @@ int main(int, char**)
 		{
 			//enableProcessing = !enableProcessing;
 			//cout << "Enable frame processing ('space' key): " << enableProcessing << endl;
-			cout << endl << "[Number of errors]" << endl;
-			cout << "monitor 1: " << err1 << endl;
-			cout << "monitor 2: " << err2 << endl;
-			cout << "monitor 3: " << err3 << endl;
-			cout << "monitor 4: " << err4 << endl << endl;
+			cout << endl << "[ Number of errors and error occureence time ]" << endl;
+			cout << " * monitor 1: " << err1 << endl;
+			for (int i = 0; i < err1; i++) {
+				cout << "   " << i+1 << ") "<<date[0] << "-" << date[1] << "-" << date[2] << " | " << m1[i][0] << ":" << m1[i][1] << ":" << m1[i][2] << endl;
+			}
+
+			cout << endl << " * monitor 2: " << err2 << endl;
+			for (int i = 0; i < err2; i++) {
+				cout << "   " << i + 1 << ") " << date[0] << "-" << date[1] << "-" << date[2] << " | " << m2[i][0] << ":" << m2[i][1] << ":" << m2[i][2] << endl;
+			}
+
+			cout << endl << " * monitor 3: " << err3 << endl;
+			for (int i = 0; i < err3; i++) {
+				cout << "   " << i + 1 << ") " << date[0] << "-" << date[1] << "-" << date[2] << " | " << m3[i][0] << ":" << m3[i][1] << ":" << m3[i][2] << endl;
+			}
+
+			cout << endl << " * monitor 4: " << err4 << endl;
+			for (int i = 0; i < err4; i++) {
+				cout << "   " << i + 1 << ") " << date[0] << "-" << date[1] << "-" << date[2] << " | " << m4[i][0] << ":" << m4[i][1] << ":" << m4[i][2] << endl;
+			}
 		}
 	}
 
